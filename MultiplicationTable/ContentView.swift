@@ -25,8 +25,8 @@ struct Question {
 
 struct ContentView: View {
     @State private var gameIsActive: Bool = false
-    @State private var maxTable : Int = 0
-    @State private var questionCount : Int = 0
+    @State private var maxTable : Int? = nil
+    @State private var questionCount : Int? = nil
     @State private var questions: [Question] = []
     @State private var currentQuestion: Int = 0
     @State private var userAnswer: Int? = nil
@@ -37,27 +37,52 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("Game Settings")
-                TextField("Choose your number", value: $maxTable, formatter: NumberFormatter()).background(Color.yellow)
-                TextField("Select a number of questions", value: $questionCount, formatter: NumberFormatter()).background(.red)
-                Button("Start Game") {
-                    //do smth
+                Spacer()
+                VStack {
+                    Text("Game Settings")
+                    TextField("Choose your number", value: $maxTable, formatter: NumberFormatter()).background(Color.yellow)
+                    TextField("Select a number of questions", value: $questionCount, formatter: NumberFormatter()).background(.red)
+                    Button("Start Game") {
+                        startGame()
+                    }
                 }
-            }
-            Spacer()
-            VStack {
-       //         Text(questions.randomElement(in: 0..<questions.count)?.askQuestion())
-            }
-            Spacer()
-            VStack {
-                Text("Your score is: \(score)")
-                Button("Play again") {
+                Spacer()
+                VStack {
+                    if gameIsActive && currentQuestion < questions.count {
+                        Text(questions[currentQuestion].askQuestion())
+                    }
+                    else {
+                        Text("Qustion will be here")
+                    }
+                    TextField("Printyour answer", value: $userAnswer, formatter: NumberFormatter()).background(.red)
                     
                 }
-            }
-        }.frame(width: 600, height: 600)
+                Spacer()
+                VStack {
+                    Text("Your score is: \(score)")
+                    Button("Play again") {
+                        
+                    }
+                }.navigationTitle("Multiplier")
+                
+            }.background(.green)
+            
+        }
     }
+    
+    func startGame() {
+        questions = (0..<(questionCount ?? 0)).map { _ in
+            Question(firstMultiplier: Int.random(in: 2...(maxTable ?? 0)),
+                     secondMultiplier: Int.random(in: 2...(maxTable ?? 0)))
+        }
+        currentQuestion = 0
+        score = 0
+        gameIsActive = true
+    }
+
 }
+
+
 
 #Preview {
     ContentView()
