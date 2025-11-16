@@ -32,31 +32,43 @@ struct ContentView: View {
     @State private var userAnswer: Int? = nil
     @State private var score = 0
     
+    var settings: some View {
+        VStack {
+            Text("Game Settings")
+            TextField("Choose your number", value: $maxTable, formatter: NumberFormatter()).background(Color.yellow)
+            TextField("Select a number of questions", value: $questionCount, formatter: NumberFormatter()).background(.red)
+            Button("Start Game") {
+                startGame()
+            }
+        }
+    }
+    
+    var gameWindow: some View {
+        VStack {
+            if gameIsActive && currentQuestion < questions.count {
+                Text(questions[currentQuestion].askQuestion())
+            }
+            else {
+                Text("Qustion will be here")
+            }
+            TextField("Printyour answer", value: $userAnswer, formatter: NumberFormatter()).background(.red)
+            
+        }
+    }
+    
+    
     
     
     var body: some View {
         NavigationStack {
             VStack {
                 Spacer()
-                VStack {
-                    Text("Game Settings")
-                    TextField("Choose your number", value: $maxTable, formatter: NumberFormatter()).background(Color.yellow)
-                    TextField("Select a number of questions", value: $questionCount, formatter: NumberFormatter()).background(.red)
-                    Button("Start Game") {
-                        startGame()
-                    }
-                }
+                if gameIsActive {
+                    gameWindow.padding(40)
+                   } else {
+                       settings.padding(40)
+                   }
                 Spacer()
-                VStack {
-                    if gameIsActive && currentQuestion < questions.count {
-                        Text(questions[currentQuestion].askQuestion())
-                    }
-                    else {
-                        Text("Qustion will be here")
-                    }
-                    TextField("Printyour answer", value: $userAnswer, formatter: NumberFormatter()).background(.red)
-                    
-                }
                 Spacer()
                 VStack {
                     Text("Your score is: \(score)")
