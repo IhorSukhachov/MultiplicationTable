@@ -46,12 +46,10 @@ struct ContentView: View {
     var gameWindow: some View {
         VStack {
             if gameIsActive && currentQuestion < questions.count {
+                Text("How much is:")
                 Text(questions[currentQuestion].askQuestion())
             }
-            else {
-                Text("Qustion will be here")
-            }
-            TextField("Printyour answer", value: $userAnswer, formatter: NumberFormatter()).background(.red)
+            TextField("Your answer is", value: $userAnswer, formatter: NumberFormatter()).background(.red)
             
         }
     }
@@ -73,11 +71,12 @@ struct ContentView: View {
                 VStack {
                     Text("Your score is: \(score)")
                     Button("Play again") {
+                        gameIsActive = false
                         
                     }
                 }.navigationTitle("Multiplier")
                 
-            }.background(.green)
+            }.background(.pink).font(.largeTitle.bold()).font(.body)
             
         }
     }
