@@ -36,27 +36,28 @@ struct ContentView: View {
         VStack {
             Text("Game Settings")
             Section("Chose a number") {
-                TextField("", value: $maxTable, formatter: NumberFormatter()).keyboardType(.numberPad).background(Color.yellow)
+                TextField("", value: $maxTable, formatter: NumberFormatter()).keyboardType(.numberPad)
             }
             
             Section("Number of questions") {
-                TextField("Select a number of questions", value: $questionCount, formatter: NumberFormatter()).background(.red)
+                TextField("Select a number of questions", value: $questionCount, formatter: NumberFormatter())
             }
            
             Button("Start Game") {
                 startGame()
-            }
+            }.buttonStyle(.borderedProminent)
+                .tint(Color.white.opacity(0.5))
         }
     }
     
     var gameWindow: some View {
         VStack {
             if gameIsActive && currentQuestion < questions.count {
-                Text("How much is:")
-                Text(questions[currentQuestion].askQuestion())
+                Section("How much is:") {
+                    Text(questions[currentQuestion].askQuestion())
+                }
+                TextField("Your answer is", value: $userAnswer, formatter: NumberFormatter())//.background(.red)
             }
-            TextField("Your answer is", value: $userAnswer, formatter: NumberFormatter())//.background(.red)
-            
         }
     }
     
@@ -65,27 +66,60 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                Spacer()
-                if gameIsActive {
-                    gameWindow.padding(40)
-                   } else {
-                       settings.padding(40)
-                   }
-                Spacer()
-                Spacer()
-                VStack {
-                    Text("Your score is: \(score)")
-                    Button("Play again") {
-                        gameIsActive = false
-                        
+            ZStack {
+                // BEAUTIFUL BACKGROUND
+                LinearGradient(
+                    colors: [
+                        Color(red: 1.0, green: 0.85, blue: 0.89),
+                        Color(red: 0.93, green: 0.82, blue: 1.0)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+
+                VStack(spacing: 20) {
+                    Spacer()
+
+                    if gameIsActive {
+                        gameWindow
+                            .padding(40)
+                            .background(.white.opacity(0.2))
+                            .clipShape(RoundedRectangle(cornerRadius: 30))
+                    } else {
+                        settings
+                            .padding(40)
+                            .background(.white.opacity(0.2))
+                            .clipShape(RoundedRectangle(cornerRadius: 30))
                     }
-                }.navigationTitle("Multiplier")
-                
-            }.background(Color.purple).font(.largeTitle.bold()).font(.body)
-            
+
+                    Spacer()
+
+                    VStack(spacing: 12) {
+                        Text("Your score is: \(score)")
+                            .font(.system(.title2, design: .rounded))
+                            .bold()
+
+                        Button("Play again") {
+                            gameIsActive = false
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.white.opacity(0.4))
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .buttonStyle(.borderedProminent)
+                        .tint(Color.white.opacity(0.5))
+                    }
+                    .padding(.horizontal, 30)
+                    .navigationTitle("Multiplier")
+                }
+                .padding()
+                .font(.system(.title3, design: .rounded))
+            }
         }
     }
+
     
     func startGame() {
         questions = (0..<(questionCount ?? 0)).map { _ in
