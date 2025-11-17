@@ -33,20 +33,48 @@ struct ContentView: View {
     @State private var score = 0
     
     var settings: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: 25) {
             Text("Game Settings")
-            Section("Chose a number") {
-                TextField("", value: $maxTable, formatter: NumberFormatter()).keyboardType(.numberPad)
+                .font(.system(size: 32, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+                .shadow(color: .pink, radius: 10)
+
+            VStack(alignment: .leading) {
+                Text("Choose the largest multiplication number:")
+                    .foregroundColor(.white.opacity(0.9))
+
+                TextField("Enter max table (e.g. 5 or 10)", value: $maxTable, formatter: NumberFormatter())
+                    .keyboardType(.numberPad)
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .foregroundColor(.white)
+                    .shadow(color: .pink.opacity(0.6), radius: 10)
             }
-            
-            Section("Number of questions") {
-                TextField("Select a number of questions", value: $questionCount, formatter: NumberFormatter())
+
+            VStack(alignment: .leading) {
+                Text("How many questions do you want?")
+                    .foregroundColor(.white.opacity(0.9))
+
+                TextField("Number of questions", value: $questionCount, formatter: NumberFormatter())
+                    .keyboardType(.numberPad)
+                    .padding()
+                    .background(Color.white.opacity(0.2))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .foregroundColor(.white)
+                    .shadow(color: .pink.opacity(0.6), radius: 10)
             }
-           
-            Button("Start Game") {
+
+            Button("Start Practice") {
                 startGame()
-            }.buttonStyle(.borderedProminent)
-                .tint(Color.white.opacity(0.5))
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.white.opacity(0.3))
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .font(.system(size: 24, weight: .bold, design: .rounded))
+            .foregroundColor(.white)
+            .shadow(color: Color.pink.opacity(1.0), radius: 20)
         }
     }
     
