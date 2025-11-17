@@ -211,12 +211,19 @@ struct ContentView: View {
 
     
     func startGame() {
-        questions = (0..<(questionCount ?? 0)).map { _ in
-            Question(firstMultiplier: Int.random(in: 2...(maxTable ?? 0)),
-                     secondMultiplier: Int.random(in: 2...(maxTable ?? 0)))
+        guard let maxTable, let questionCount, maxTable > 1, questionCount > 0 else { return }
+
+        questions = (0..<questionCount).map { _ in
+            Question(
+                firstMultiplier: Int.random(in: 2...maxTable),
+                secondMultiplier: Int.random(in: 2...maxTable)
+            )
         }
+
         currentQuestion = 0
         score = 0
+        userAnswer = nil
+
         gameIsActive = true
     }
     
