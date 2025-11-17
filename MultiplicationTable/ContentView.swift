@@ -23,6 +23,8 @@ struct Question {
     }
 }
 
+
+
 struct CuteAnimal: View {
     @State private var bounce = false
   
@@ -48,9 +50,12 @@ struct ContentView: View {
     @State private var maxTable : Int? = nil
     @State private var questionCount : Int? = nil
     @State private var questions: [Question] = []
-    @State private var currentQuestion: Int = 0
+    @State private var currentQuestion: Int = 1
     @State private var userAnswer: Int? = nil
     @State private var score = 0
+    @State private var showAnswerAlert = false
+    @State private var answerIsCorrect = false
+    @State private var showGameOverAlert = false
     
     var settings: some View {
           
@@ -216,11 +221,24 @@ struct ContentView: View {
     }
     
     func confirmAnswer() {
-        if userAnswer == questions[currentQuestion].correctAnswer {
-            score += 1
+        guard let userAnswer else { return }
+
+        let correct = questions[currentQuestion].isCorrect(userAnswer)
+        answerIsCorrect = correct
+
+        if correct { score += 1 }
+
+        // Show correct/incorrect alert
+        showAnswerAlert = true
+
+        // If this was the last question → game over
+        if currentQuestion == questions.count - 1 {
+            showGameOverAlert = true
+        } else {
+            currentQuestion += 1
         }
-        currentQuestion += 1
-        
+
+        self.userAnswer = nil
     }
 
 }
