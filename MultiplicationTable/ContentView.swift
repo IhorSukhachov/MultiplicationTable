@@ -67,58 +67,68 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                // BEAUTIFUL BACKGROUND
+               
                 LinearGradient(
                     colors: [
-                        Color(red: 1.0, green: 0.85, blue: 0.89),
-                        Color(red: 0.93, green: 0.82, blue: 1.0)
+                        Color(red: 1.0, green: 0.30, blue: 0.75),
+                        Color(red: 1.0, green: 0.52, blue: 1.0)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
 
-                VStack(spacing: 20) {
+                VStack(spacing: 30) {
                     Spacer()
 
-                    if gameIsActive {
-                        gameWindow
-                            .padding(40)
-                            .background(.white.opacity(0.2))
-                            .clipShape(RoundedRectangle(cornerRadius: 30))
-                    } else {
-                        settings
-                            .padding(40)
-                            .background(.white.opacity(0.2))
-                            .clipShape(RoundedRectangle(cornerRadius: 30))
+                    Group {
+                        if gameIsActive {
+                            gameWindow
+                        } else {
+                            settings
+                        }
                     }
+                    .padding(35)
+                    .background(Color.white.opacity(0.12))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 30)
+                            .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                    )
+                    .clipShape(RoundedRectangle(cornerRadius: 30))
+                    .shadow(color: .white.opacity(0.4), radius: 20)
+                    .padding(.horizontal)
 
                     Spacer()
 
-                    VStack(spacing: 12) {
-                        Text("Your score is: \(score)")
-                            .font(.system(.title2, design: .rounded))
-                            .bold()
+                    VStack(spacing: 10) {
+                        Text("Your Score: \(score)")
+                            .font(.system(size: 28, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .shadow(color: Color.pink.opacity(0.9), radius: 10)
 
-                        Button("Play again") {
+                        Button("Play Again") {
                             gameIsActive = false
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.white.opacity(0.4))
+                        .background(Color.white.opacity(0.25))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.white.opacity(0.5), lineWidth: 2)
+                        )
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .font(.system(size: 22, weight: .bold, design: .rounded))
-                        .buttonStyle(.borderedProminent)
-                        .tint(Color.white.opacity(0.5))
+                        .foregroundColor(.white)
+                        .shadow(color: Color.pink.opacity(0.8), radius: 15)
                     }
-                    .padding(.horizontal, 30)
-                    .navigationTitle("Multiplier")
+                    .padding(.horizontal, 40)
+                    .navigationTitle("Pink Multiplier")
+                    .foregroundColor(.white)
                 }
-                .padding()
-                .font(.system(.title3, design: .rounded))
             }
         }
     }
+
 
     
     func startGame() {
