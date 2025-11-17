@@ -23,6 +23,26 @@ struct Question {
     }
 }
 
+struct CuteAnimal: View {
+    @State private var bounce = false
+  
+
+    var body: some View {
+        Image("pig")
+            .frame(maxWidth: 100, maxHeight: 150)
+            .scaledToFit()
+            .scaleEffect(bounce ? 1.15 : 0.95)
+            .shadow(color: Color.pink.opacity(0.6), radius: 20)
+            .animation(.easeInOut(duration: 1.5).repeatForever(), value: bounce)
+            
+            .onAppear {
+                bounce = true
+            }
+            
+           
+    }
+}
+
 struct ContentView: View {
     @State private var gameIsActive: Bool = false
     @State private var maxTable : Int? = nil
@@ -33,7 +53,11 @@ struct ContentView: View {
     @State private var score = 0
     
     var settings: some View {
+          
         VStack(alignment: .leading, spacing: 25) {
+            
+            
+                
             Text("Game Settings")
                 .font(.system(size: 32, weight: .bold, design: .rounded))
                 .foregroundColor(.white)
@@ -79,13 +103,36 @@ struct ContentView: View {
     }
     
     var gameWindow: some View {
-        VStack {
-            if gameIsActive && currentQuestion < questions.count {
-                Section("How much is:") {
-                    Text(questions[currentQuestion].askQuestion())
-                }
-                TextField("Your answer is", value: $userAnswer, formatter: NumberFormatter())//.background(.red)
+        VStack(spacing: 30) {
+            Text("Solve this:")
+                .font(.system(size: 28, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+                .shadow(color: .pink.opacity(1), radius: 12)
+
+            Text(questions[currentQuestion].askQuestion())
+                .font(.system(size: 48, weight: .heavy, design: .rounded))
+                .foregroundColor(.white)
+                .shadow(color: .pink.opacity(0.9), radius: 20)
+
+            TextField("Your Answer", value: $userAnswer, formatter: NumberFormatter())
+                .keyboardType(.numberPad)
+                .padding()
+                .background(Color.white.opacity(0.25))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .foregroundColor(.white)
+                .font(.system(size: 24, weight: .bold, design: .rounded))
+                .shadow(color: .pink.opacity(0.8), radius: 15)
+            
+            Button("Confirm") {
+                confirmAnswer()
             }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.white.opacity(0.3))
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .font(.system(size: 24, weight: .bold, design: .rounded))
+            .foregroundColor(.white)
+            .shadow(color: Color.pink.opacity(1.0), radius: 20)
         }
     }
     
@@ -105,10 +152,9 @@ struct ContentView: View {
                     endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
-
-                VStack(spacing: 30) {
-                    Spacer()
-
+                
+                VStack(spacing: 10) {
+                    CuteAnimal()
                     Group {
                         if gameIsActive {
                             gameWindow
@@ -126,7 +172,6 @@ struct ContentView: View {
                     .shadow(color: .white.opacity(0.4), radius: 20)
                     .padding(.horizontal)
 
-                    Spacer()
 
                     VStack(spacing: 10) {
                         Text("Your Score: \(score)")
@@ -151,6 +196,7 @@ struct ContentView: View {
                     }
                     .padding(.horizontal, 40)
                     .navigationTitle("Pink Multiplier")
+                    .toolbarColorScheme(.dark)
                     .foregroundColor(.white)
                 }
             }
@@ -167,6 +213,14 @@ struct ContentView: View {
         currentQuestion = 0
         score = 0
         gameIsActive = true
+    }
+    
+    func confirmAnswer() {
+        if userAnswer == questions[currentQuestion].correctAnswer {
+            score += 1
+        }
+        currentQuestion += 1
+        
     }
 
 }
