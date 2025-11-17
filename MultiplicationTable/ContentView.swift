@@ -186,6 +186,10 @@ struct ContentView: View {
 
                         Button("Play Again") {
                             gameIsActive = false
+                            score = 0
+                            questions.removeAll()
+                            maxTable = 0
+                            questionCount = 0
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
@@ -204,6 +208,27 @@ struct ContentView: View {
                     .toolbarColorScheme(.dark)
                     .foregroundColor(.white)
                 }
+            }.alert("Answer", isPresented: $showAnswerAlert) {
+                Button("OK") {}
+            } message: {
+                if answerIsCorrect {
+                    Text("Correct! 🎉")
+                } else {
+                    Text("Oops! Try the next one 😅")
+                }
+            }
+
+            .alert("Game Over", isPresented: $showGameOverAlert) {
+                Button("OK") {
+                    showAnswerAlert = false
+                    gameIsActive = false
+                    score = 0
+                    questions.removeAll()
+                    maxTable = 0
+                    questionCount = 0
+                }
+            } message: {
+                Text("You scored \(score) out of \(questions.count)!")
             }
         }
     }
