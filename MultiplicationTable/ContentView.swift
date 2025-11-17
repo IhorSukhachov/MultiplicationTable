@@ -35,8 +35,14 @@ struct ContentView: View {
     var settings: some View {
         VStack {
             Text("Game Settings")
-            TextField("Choose your number", value: $maxTable, formatter: NumberFormatter()).background(Color.yellow)
-            TextField("Select a number of questions", value: $questionCount, formatter: NumberFormatter()).background(.red)
+            Section("Chose a number") {
+                TextField("", value: $maxTable, formatter: NumberFormatter()).keyboardType(.numberPad).background(Color.yellow)
+            }
+            
+            Section("Number of questions") {
+                TextField("Select a number of questions", value: $questionCount, formatter: NumberFormatter()).background(.red)
+            }
+           
             Button("Start Game") {
                 startGame()
             }
@@ -49,7 +55,7 @@ struct ContentView: View {
                 Text("How much is:")
                 Text(questions[currentQuestion].askQuestion())
             }
-            TextField("Your answer is", value: $userAnswer, formatter: NumberFormatter()).background(.red)
+            TextField("Your answer is", value: $userAnswer, formatter: NumberFormatter())//.background(.red)
             
         }
     }
@@ -76,7 +82,7 @@ struct ContentView: View {
                     }
                 }.navigationTitle("Multiplier")
                 
-            }.background(.pink).font(.largeTitle.bold()).font(.body)
+            }.background(Color.purple).font(.largeTitle.bold()).font(.body)
             
         }
     }
